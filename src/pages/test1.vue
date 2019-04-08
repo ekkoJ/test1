@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="wrapper">
-      <wrapper></wrapper>
+      <wrapper ref="wrapper"></wrapper>
     </div>
     <div
       class="active-block"
@@ -45,6 +45,7 @@ export default {
   mounted () {
     let self = this
     document.addEventListener('mouseup', () => {
+      self.$refs.wrapper.showBlock(self.activeComs)
       self.activeComs = ''
     })
     document.addEventListener('mousemove', self.draging)
@@ -72,7 +73,6 @@ export default {
     },
     draging (el) {
       if (!this.activeComs) return
-      console.log(el)
       this.dragOffset.x = el.pageX - 30
       this.dragOffset.y = el.pageY - 30
     }
@@ -101,6 +101,7 @@ blockSize = 60px
     overflow hidden
     background #333
   .active-block
+    z-index 1
     width blockSize
     height blockSize
     color red

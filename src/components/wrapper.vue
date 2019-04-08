@@ -10,7 +10,7 @@
           {{ n }}
         </span>
       </div>
-      <div class="points-wrapper" @mouseleave="handleMouse">
+      <div class="points-wrapper" @mouseleave="handleMouse(null)">
         <div
           class="rows"
           v-for="n in rows"
@@ -20,8 +20,14 @@
             v-for="col in cols"
             :key="col"
             :class="['points cols', { 'active': n === activePoint.row && col === activePoint.col }]"
-            @mouseenter="handleMouse(n, col)"
+            @mouseover="handleMouse(n, col)"
           >
+            <!-- <div
+              class="active-block"
+              v-if="activeComs"
+            >
+              {{ activeComs }}
+            </div> -->
           </div>
         </div>
       </div>
@@ -44,8 +50,12 @@ export default {
   },
   methods: {
     handleMouse (row, col) {
+      console.log(row + '===' + col)
       this.activePoint.row = row || -1
       this.activePoint.col = col || -1
+    },
+    showBlock (block) {
+      console.log(this.activePoint)
     }
   }
 }
@@ -76,6 +86,8 @@ wrapperSize = 60px
     justify-content center
     flex-direction column
     align-items center
+    position relative
+    z-index 2
     // justify-content center
     &:after
       display inline-block
