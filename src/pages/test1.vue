@@ -61,7 +61,7 @@ export default {
     }
   },
   destroyed () {
-    document.removeEventListener('onmouseup', () => {
+    document.removeEventListener('mouseup', () => {
       self.activeComs = ''
     })
   },

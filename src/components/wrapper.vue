@@ -21,13 +21,14 @@
             :key="col"
             :class="['points cols', { 'active': n === activePoint.row && col === activePoint.col }]"
             @mouseover="handleMouse(n, col)"
+            @mouseup="handleMouseUp(n, col)"
           >
-            <!-- <div
+            <div
               class="active-block"
-              v-if="activeComs"
+              v-if="!!activeComs(n, col)"
             >
-              {{ activeComs }}
-            </div> -->
+              {{ activeComs(n, col).block }}
+            </div>
           </div>
         </div>
       </div>
@@ -45,17 +46,42 @@ export default {
       activePoint: {
         row: -1,
         col: -1
-      }
+      },
+      tempRecord: null,
+      records: []
     }
   },
   methods: {
     handleMouse (row, col) {
-      console.log(row + '===' + col)
       this.activePoint.row = row || -1
       this.activePoint.col = col || -1
     },
+    handleMouseUp (row, col) {
+      this.tempRecord = {
+        row,
+        col
+      }
+      console.log(row + '===' + col)
+      console.log('mouseUp')
+    },
     showBlock (block) {
-      console.log(this.activePoint)
+      if (!block || !this.tempRecord) {
+        this.tempRecord = null
+        return
+      }
+      let index = this.records.findIndex(block => block.col === this.tempRecord.col && block.row === this.tempRecord.row)
+      if (index < 0) {
+        this.records.push({
+          row: this.tempRecord.row,
+          col: this.tempRecord.col,
+          block
+        })
+      }
+      console.log(block)
+    },
+    activeComs (row, col) {
+      let index = this.records.findIndex(block => block.col === col && block.row === row)
+      return this.records[index]
     }
   }
 }
@@ -100,4 +126,16 @@ wrapperSize = 60px
       background rgba(0, 0, 0, 0.2)
       &:after
         background red
+  .active-block
+    z-index 2
+    width wrapperSize
+    height wrapperSize
+    color red
+    border 1px solid red
+    font-size 12px
+    text-align center
+    box-sizing border-box
+    position absolute
+    top 0
+    left 0
 </style>
